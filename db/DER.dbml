@@ -1,0 +1,43 @@
+Project Memo {
+    database_type: 'PostgresQL'
+}
+
+Table users {
+    id int [pk, increment]
+    name varchar
+    email varchar [unique]
+    password varchar
+}
+
+Table backgrounds {
+    id int [pk, increment]
+    screen EnumScreen
+    user_id int [ref: > users.id]
+    image_url varchar
+}
+
+Table documents {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  title varchar
+  image_url varchar
+  created_at datetime
+}
+
+Table cards {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  card_number varchar
+  expiration_date date
+  cvv int
+  created_at datetime
+}
+
+enum EnumScreen {
+    Login
+    Register
+    Home
+    Documents
+    Cards
+    Settings
+}
