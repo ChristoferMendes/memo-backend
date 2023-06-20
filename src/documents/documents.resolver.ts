@@ -12,7 +12,10 @@ import { Document } from './entities/documents.entity';
 import { CreateDocumentInput } from './dto/create-documents.input';
 import { UpdateDocumentInput } from './dto/update-documents.input';
 import { UsersService } from 'src/users/users.service';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Resolver(() => Document)
 export class DocumentResolver {
   constructor(
