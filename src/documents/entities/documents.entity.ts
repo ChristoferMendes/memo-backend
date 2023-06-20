@@ -19,6 +19,10 @@ export class Document extends BaseEntity {
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   user: User;
 
+  @Field(() => String)
+  @Column()
+  user_id: number;
+
   @Field()
   @Column()
   title: string;
@@ -28,6 +32,10 @@ export class Document extends BaseEntity {
   image_url: string;
 
   @Field()
-  @Column()
+  @Column({ default: () => 'now()' })
   created_at: Date;
+
+  @Field()
+  @Column({ default: () => 'now()' })
+  updated_at: Date;
 }

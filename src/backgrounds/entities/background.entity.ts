@@ -38,5 +38,9 @@ export class Background extends BaseEntity {
 
   @Field()
   @Column()
+  user_id: number;
+
+  @Field()
+  @Column()
   image_url: string;
 }

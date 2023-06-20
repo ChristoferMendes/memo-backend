@@ -1,12 +1,24 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { DocumentService } from './documents.service';
 import { Document } from './entities/documents.entity';
 import { CreateDocumentInput } from './dto/create-documents.input';
 import { UpdateDocumentInput } from './dto/update-documents.input';
+import { UsersService } from 'src/users/users.service';
 
 @Resolver(() => Document)
 export class DocumentResolver {
-  constructor(private readonly documentService: DocumentService) {}
+  constructor(
+    private readonly documentService: DocumentService,
+    private readonly userService: UsersService,
+  ) {}
 
   @Mutation(() => Document)
   createDocument(
@@ -15,7 +27,7 @@ export class DocumentResolver {
     return this.documentService.create(createDocumentInput);
   }
 
-  @Query(() => [Document], { name: 'document' })
+  @Query(() => [Document], { name: 'documents' })
   findAll() {
     return this.documentService.findAll();
   }
@@ -38,5 +50,10 @@ export class DocumentResolver {
   @Mutation(() => Document)
   removeDocument(@Args('id', { type: () => Int }) id: number) {
     return this.documentService.remove(id);
+  }
+
+  @ResolveField()
+  async user(@Parent() document: Document) {
+    return this.userService.findOne(document.user_id);
   }
 }

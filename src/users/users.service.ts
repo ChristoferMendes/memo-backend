@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bscrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -12,8 +13,11 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserInput: CreateUserInput) {
-    return this.usersRepository.create(createUserInput);
+  async create(createUserInput: CreateUserInput) {
+    return this.usersRepository.save({
+      ...createUserInput,
+      password: await bscrypt.hash(createUserInput.password, 10),
+    });
   }
 
   findAll() {
@@ -24,11 +28,35 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id });
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return this.usersRepository.update(id, updateUserInput);
+  async update(id: number, updateUserInput: UpdateUserInput) {
+    const user = await this.findOne(id);
+
+    if (!user) throw new NotFoundException('User not found');
+
+    await this.usersRepository.update(id, updateUserInput);
+
+    const newUser = this._injectPayloadKeys(user, updateUserInput);
+
+    return newUser;
   }
 
-  remove(id: number) {
-    return this.usersRepository.delete(id);
+  private _injectPayloadKeys<T>(user: User, payload: T) {
+    Object.keys(payload).forEach((key) => {
+      const payloadKey = payload[key];
+      if (payloadKey === undefined) return;
+
+      user[key] = payloadKey;
+    });
+
+    return user;
+  }
+  async remove(id: number) {
+    const user = await this.findOne(id);
+
+    if (!user) throw new NotFoundException('User not found');
+
+    await this.usersRepository.delete(id);
+
+    return user;
   }
 }

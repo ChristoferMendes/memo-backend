@@ -21,6 +21,10 @@ export class Card extends BaseEntity {
 
   @Field()
   @Column()
+  user_id: number;
+
+  @Field()
+  @Column()
   card_number: string;
 
   @Field()
