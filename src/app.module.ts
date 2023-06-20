@@ -7,6 +7,7 @@ import { dataSourceOptions } from 'db/data-source';
 import { BackgroundsModule } from './backgrounds/backgrounds.module';
 import { DocumentModule } from './documents/documents.module';
 import { CardModule } from './cards/cards.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CardModule } from './cards/cards.module';
     BackgroundsModule,
     DocumentModule,
     CardModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
