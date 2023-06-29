@@ -1,10 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { AuthOutput } from './dto/auth.output';
 import { compareSync } from 'bcrypt';
 import { AuthInput } from './dto/auth.input';
 import { User } from 'src/users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +20,10 @@ export class AuthService {
 
   async validateUser(authInput: AuthInput): Promise<AuthOutput> {
     const user = await this.userService.findByEmail(authInput.email);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
     const validPassword = compareSync(authInput.password, user.password);
 

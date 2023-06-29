@@ -6,6 +6,7 @@ async function bootstrap() {
   config();
   const app = await NestFactory.create(AppModule);
   await app.listen(3000);
+  app.enableCors();
 
   const url = `http://localhost:3000`;
   console.log(`[MEMO] is running on ${url}`);

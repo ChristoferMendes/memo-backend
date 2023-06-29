@@ -4,7 +4,7 @@ import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard, CurrentUser } from 'src/auth/auth.guard';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -25,6 +25,12 @@ export class UsersResolver {
   @UseGuards(AuthGuard)
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.usersService.findOne(id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Query(() => User, { name: 'me' })
+  async me(@CurrentUser() user: User) {
+    return user;
   }
 
   @Mutation(() => User)

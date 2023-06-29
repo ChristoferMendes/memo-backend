@@ -14,6 +14,12 @@ export class UsersService {
   ) {}
 
   async create(createUserInput: CreateUserInput) {
+    const user = await this.findByEmail(createUserInput.email);
+
+    if (user) {
+      throw new NotFoundException('User already exists');
+    }
+
     return this.usersRepository.save({
       ...createUserInput,
       password: await bscrypt.hash(createUserInput.password, 10),
