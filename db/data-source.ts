@@ -12,11 +12,11 @@ import { DefaultValuesToDocumentTimestamps1687152830091 } from './migrations/168
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  host: 'localhost',
+  host: process.env.POSTGRES_HOST,
   port: 5432,
-  username: 'docker',
-  password: 'docker',
-  database: 'docker',
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
   entities: [User, Background, Document, Card],
   migrations: [
     CreateUser1687144360459,

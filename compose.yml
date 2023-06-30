@@ -1,15 +1,41 @@
 services:
-  db: 
+  memo_nestjs:
+      build: 
+        context: ./
+        dockerfile: ./.docker/Dockerfile
+      container_name: memo_nestjs
+      restart: unless-stopped
+      entrypoint: ./.docker/entrypoint.sh
+      ports:
+        - 3000:3000
+      volumes:
+        - .:/home/node/app
+      depends_on:
+        - memo_db
+      networks:
+        - memo-network
+      environment:
+        - POSTGRES_HOST=memo_db
+      env_file:
+        - ./.env
+
+  memo_db: 
     image: postgres
-    container_name: db
-    environment:
-      - POSTGRES_USER=docker
-      - POSTGRES_PASSWORD=docker
-      - POSTGRES_DB=docker
+    container_name: memo_db
+    env_file:
+      - ./.env
+    # environment:
+    #   - POSTGRES_USER=docker
+    #   - POSTGRES_PASSWORD=docker
+    #   - POSTGRES_DB=docker
     ports:
       - 5432:5432
     volumes:
       - pg-data:/var/lib/postgresql/data
+    networks:
+      - memo-network
 
 volumes:
   pg-data:
+networks:
+  memo-network:
