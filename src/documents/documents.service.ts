@@ -15,24 +15,7 @@ export class DocumentService {
   ) {}
 
   async create(createDocumentInput: CreateDocumentInput) {
-    const documentTypeAlreadyExistsForThisUser =
-      await this.documentRepository.findOneBy({
-        user_id: createDocumentInput.user_id,
-        type: createDocumentInput.type,
-      });
-
-    if (documentTypeAlreadyExistsForThisUser) {
-      await this.documentRepository.update(
-        { id: documentTypeAlreadyExistsForThisUser.id },
-        { image_url: createDocumentInput.image_url },
-      );
-
-      return {
-        ...documentTypeAlreadyExistsForThisUser,
-        image_url: createDocumentInput.image_url,
-      };
-    }
-
+    console.log('reached');
     return this.documentRepository.save(createDocumentInput);
   }
 
@@ -60,5 +43,19 @@ export class DocumentService {
     await this.documentRepository.delete(id);
 
     return document;
+  }
+
+  async findDocumentsByUser(user_id: number) {
+    const user = await this.userService.findOne(user_id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const documents = await this.documentRepository.find({
+      where: { user_id },
+    });
+
+    return documents;
   }
 }

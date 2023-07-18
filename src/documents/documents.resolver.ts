@@ -55,6 +55,11 @@ export class DocumentResolver {
     return this.documentService.remove(id);
   }
 
+  @Query(() => [Document], { name: 'documentsByUser' })
+  async findDocumentsByUser(@Args('user_id') user_id: number) {
+    return this.documentService.findDocumentsByUser(user_id);
+  }
+
   @ResolveField()
   async user(@Parent() document: Document) {
     return this.userService.findOne(document.user_id);
