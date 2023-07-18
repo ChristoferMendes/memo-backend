@@ -1,4 +1,5 @@
-import { InputType, ID, Field } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
+import { DocumentTypeEnum } from '../entities/documents.entity';
 @InputType()
 export class CreateDocumentInput {
   @Field(() => Number)
@@ -9,4 +10,7 @@ export class CreateDocumentInput {
 
   @Field()
   image_url: string;
+
+  @Field(() => DocumentTypeEnum)
+  type: `${DocumentTypeEnum}`;
 }

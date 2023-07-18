@@ -8,6 +8,8 @@ import { BackgroundsModule } from './backgrounds/backgrounds.module';
 import { DocumentModule } from './documents/documents.module';
 import { CardModule } from './cards/cards.module';
 import { AuthModule } from './auth/auth.module';
+import { UploadModule } from './upload/upload.module';
+import { OcrModule } from './ocr/ocr.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { AuthModule } from './auth/auth.module';
     DocumentModule,
     CardModule,
     AuthModule,
+    UploadModule,
+    OcrModule,
   ],
 })
 export class AppModule {}
