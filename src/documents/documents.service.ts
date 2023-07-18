@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDocumentInput } from './dto/create-documents.input';
 import { UpdateDocumentInput } from './dto/update-documents.input';
 import { UsersService } from 'src/users/users.service';
@@ -18,8 +18,10 @@ export class DocumentService {
     return this.documentRepository.save(createDocumentInput);
   }
 
-  findAll() {
-    return this.documentRepository.find();
+  async findAll() {
+    const documents = await this.documentRepository.find();
+
+    return documents;
   }
 
   findOne(id: number) {
@@ -30,7 +32,15 @@ export class DocumentService {
     return this.documentRepository.update(id, updateDocumentInput);
   }
 
-  remove(id: number) {
-    return this.documentRepository.delete(id);
+  async remove(id: number) {
+    const document = await this.findOne(id);
+
+    if (!document) {
+      throw new NotFoundException('Document not found');
+    }
+
+    await this.documentRepository.delete(id);
+
+    return document;
   }
 }

@@ -9,14 +9,15 @@ import { CreateDocument1687148812136 } from './migrations/1687148812136-create-d
 import { CreateCard1687148842117 } from './migrations/1687148842117-create-card';
 import { AddUserIdToTables1687149533940 } from './migrations/1687149533940-add-user-id-to-tables';
 import { DefaultValuesToDocumentTimestamps1687152830091 } from './migrations/1687152830091-default-values-to-document-timestamps';
+import { AddTypeToDocument1689648991668 } from './migrations/1689648991668-add-type-to-document';
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  host: process.env.POSTGRES_HOST,
+  host: process.env.POSTGRES_HOST ?? 'localhost',
   port: 5432,
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
+  username: process.env.POSTGRES_USER ?? 'docker',
+  password: process.env.POSTGRES_PASSWORD ?? 'docker',
+  database: process.env.POSTGRES_DB ?? 'docker',
   entities: [User, Background, Document, Card],
   migrations: [
     CreateUser1687144360459,
@@ -25,6 +26,7 @@ export const dataSourceOptions: DataSourceOptions = {
     CreateCard1687148842117,
     AddUserIdToTables1687149533940,
     DefaultValuesToDocumentTimestamps1687152830091,
+    AddTypeToDocument1689648991668,
   ],
 };
 

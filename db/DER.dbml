@@ -19,6 +19,7 @@ Table backgrounds {
 Table documents {
   id int [pk, increment]
   user_id int [ref: > users.id]
+  type DocumentType
   title varchar
   image_url varchar
   created_at datetime
@@ -40,4 +41,15 @@ enum EnumScreen {
     Documents
     Cards
     Settings
+}
+
+enum DocumentType {
+  CPF
+  RG
+  CNH
+  CRLV
+  PASSPORT
+  VACCINE
+  ID
+  OTHER
 }

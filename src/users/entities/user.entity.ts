@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Document } from 'src/documents/entities/documents.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity({ name: 'users' })
@@ -19,4 +20,9 @@ export class User {
   @Field(() => String)
   @Column()
   password: string;
+
+  @OneToMany(() => Document, (document) => document.user, {
+    onDelete: 'CASCADE',
+  })
+  documents: Document[];
 }
